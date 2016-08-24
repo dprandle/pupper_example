@@ -21,7 +21,7 @@ void obj_a_container::release()
 
 void pup(pupper * p_, obj_a_desc & oa_d, const var_info & info)
 {
-	pup(p_, oa_d.type, var_info(info.name + "type"));
+	pup(p_, oa_d.type, var_info(info.name + ".type"));
 	if (oa_d.ptr == nullptr)
 	{
 		// This is a bit of a cheat because I don't feel like writing factory code

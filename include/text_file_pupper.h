@@ -24,14 +24,14 @@ struct text_file_pupper : public pupper
 };
 
 template<class T>
-void pup_text(text_file_pupper * p, T & val, const var_info & info, std::string & line)
+void pup_text(text_file_pupper * p, T val, const var_info & info, std::string & line)
 {
     std::string begtag, endtag;
 	begtag = "<" + info.name + ">"; endtag = "</" + info.name + ">";
 
     if (p->io == PUP_OUT)
 	{
-        p->fs << begtag << static_cast<T>(val) << endtag << "\n";
+        p->fs << begtag << val << endtag << "\n";
 	}
 	else
 	{

@@ -10,7 +10,7 @@ text_file_pupper::text_file_pupper(std::fstream & fstrm, int mode):
 void text_file_pupper::pup(char & val, const var_info & info)
 {
 	std::string line;
-    pup_text(this, val, info, line);
+    pup_text(this, int32_t(val), info, line);
 	if (!line.empty())
 		val = line[0];
 }
@@ -19,7 +19,7 @@ void text_file_pupper::pup(char & val, const var_info & info)
 void text_file_pupper::pup(wchar_t & val, const var_info & info)
 {
     std::string line;
-    pup_text(this, val, info, line);
+    pup_text(this, int32_t(val), info, line);
 	if (!line.empty())
 		val = line[0];
 }
@@ -28,7 +28,7 @@ void text_file_pupper::pup(wchar_t & val, const var_info & info)
 void text_file_pupper::pup(int8_t & val, const var_info & info)
 {
 	std::string line;
-    pup_text(this, val, info, line);
+    pup_text(this, int32_t(val), info, line);	
 	if (!line.empty())
 		val = static_cast<int8_t>(std::stoi(line));
 }

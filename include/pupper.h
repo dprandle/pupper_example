@@ -25,6 +25,8 @@ struct pupper
         io(io_)
     {}
 
+	virtual ~pupper() {}
+
 	virtual void pup(char & val_, const var_info & info_) = 0;
 	virtual void pup(wchar_t & val_, const var_info & info_) = 0;
 	virtual void pup(int8_t & val_, const var_info & info_) = 0;

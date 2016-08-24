@@ -48,7 +48,7 @@ int main()
 
 	while (running)
 	{
-		std::cout << "Would you like to populate the data (p), display the data (d), read data from file (r), write data to file (w), or quit (q)" << std::endl;
+		std::cout << "\nWhat would you like to do?...\n(p) populate the data\n(d) display the data\n(b) set to binary file io mode\n(t) set to text file io mode\n(r) read data from file\n(w) write data to file\n(q) quit" << std::endl;
 		char c;
 		std::cin >> c;
 		switch (c)
@@ -86,10 +86,12 @@ int main()
 			case ('t'):
 				fname = txt_fname;
 				save_mode = 0;
+				std::cout << "file io set to text mode" << std::endl;
 				break;
 			case ('b'):
 				fname = bin_fname;
 				save_mode = 1;
+				std::cout << "file io set to binary mode" << std::endl;
 				break;
 			default:
                 std::cout << "invalid selection - enter either d, p, r, w, or q" << std::endl;
@@ -105,6 +107,7 @@ void populate_data(obj_a_container * a_cont, const fvec4 & offset, int cnt, int 
     fvec4 neg_init(-init.x, -init.y, -init.z, -init.w);
 
 	// Now fill up the data with some stuff based on that offset
+	std::cout << "Creating " << cnt + cnt_d << " total objects..." << std::endl;
     a_cont->obj_a_vec.resize(cnt+cnt_d);
 	float cur_health = 100.0f;
 	float max_health = 100.0f;
@@ -112,16 +115,19 @@ void populate_data(obj_a_container * a_cont, const fvec4 & offset, int cnt, int 
 	{
 		if (i < cnt)
 		{
+			std::cout << "Creating obj_a and index " << i << std::endl;
 			a_cont->obj_a_vec[i].type = 1;
 			a_cont->obj_a_vec[i].ptr = new obj_a();
 		}
 		else
 		{
+			std::cout << "Creating derived_obj_a and index " << i << std::endl;
 			a_cont->obj_a_vec[i].type = 2;
 			a_cont->obj_a_vec[i].ptr = new derived_obj_a(cur_health);
 			cur_health -= max_health / cnt_d;
 		}
 
+		std::cout << "filling in object data..." << std::endl;
 		fmat4 tform;
 		for (uint j = 0; j < 4; ++j)
 		{
@@ -132,6 +138,7 @@ void populate_data(obj_a_container * a_cont, const fvec4 & offset, int cnt, int 
 		a_cont->obj_a_vec[i].ptr->set_velocity(init);
 		init.x += offset.x; init.y += offset.y; init.z += offset.z; init.w += offset.w;
 	}
+	std::cout << "Data sucessfully populated" << std::endl;
 }
 
 std::string fvec4_to_string(const fvec4 & vc)
@@ -141,14 +148,21 @@ std::string fvec4_to_string(const fvec4 & vc)
 
 void display_data(obj_a_container * a_cont)
 {
+	if (a_cont->obj_a_vec.empty())
+		std::cout << "Data empty" << std::endl;
+	
 	for (int i = 0; i < a_cont->obj_a_vec.size(); ++i)
 	{
-        std::cout << "\nObject " << i << " Properties..." << std::endl;
+		std::string type = " (obj_a)";
+		if (a_cont->obj_a_vec[i].type == 2)
+			type = " (derived_obj_a)";
+		
+        std::cout << "\nObject " << i+1 << type << " properties..." << std::endl;
 		std::cout << "Transform:\n";
 		fmat4 tform = a_cont->obj_a_vec[i].ptr->get_transform();
 		for (uint j = 0; j < 4; ++j)
 		{
-			std::cout << fvec4_to_string(tform.rows[i]) << "\n";
+			std::cout << fvec4_to_string(tform.rows[j]) << "\n";
 		}
 		std::cout << "Velocity: " << fvec4_to_string(a_cont->obj_a_vec[i].ptr->get_velocity()) << std::endl;
 		if (a_cont->obj_a_vec[i].type == 2)
